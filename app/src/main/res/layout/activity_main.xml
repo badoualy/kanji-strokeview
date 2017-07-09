@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <com.github.badoualy.kanjistroke.KanjiStrokeView
+        android:id="@+id/view_stroke"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_gravity="center"/>

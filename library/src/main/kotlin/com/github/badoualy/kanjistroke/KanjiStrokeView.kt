@@ -196,6 +196,7 @@ class KanjiStrokeView @JvmOverloads constructor(context: Context, attrs: Attribu
     // TODO: KanjiVG files are small, but probably not very efficient
     fun loadSvg(file: File) = loadSvg(file.readText())
 
+    @JvmOverloads
     fun startDrawAnimation(delay: Long = 0) {
         if (animStarted) {
             drawAnimation?.cancel()
