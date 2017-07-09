@@ -18,7 +18,7 @@ repositories {
 
 Then, add the library dependency:
 ```gradle
-compile 'com.github.badoualy:kanji-strokeview:<version>'
+compile 'com.github.badoualy:kanji-strokeview:1.0.0'
 ```
 
 
