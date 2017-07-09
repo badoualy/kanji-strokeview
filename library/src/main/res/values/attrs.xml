@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="KanjiStrokeView">
+        <attr name="svAutoRun" format="boolean"/>
+        <attr name="svAnimate" format="boolean"/>
+
+        <attr name="svStrokeColor" format="color"/>
+        <attr name="svFingerColor" format="color"/>
+        <attr name="svStrokeLightColor" format="color"/>
+        <attr name="svStrokeHighlightColor" format="color"/>
+
+        <attr name="svStrokeWidth" format="dimension"/>
+        <attr name="svFingerRadius" format="dimension"/>
+    </declare-styleable>
+</resources>
