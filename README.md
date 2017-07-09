@@ -37,15 +37,15 @@ Just add the following code to your layout:
 You can change the size to whatever you want, it should scale smoothly.
 
 Then in your code, you can use the following methods:
-`setPathData` to set the view from another KanjiStrokeView
-`loadPathData` to load a list of path data strings like:
+- `setPathData` to set the view from another KanjiStrokeView
+- `loadPathData` to load a list of path data strings like:
 ```kotlin
 listOf("M34.25,16.25c1,1,1.48,2.38,1.5,4c0.38,33.62,2.38,59.38-11,73.25",
        "M36.25,19c4.12-0.62,31.49-4.78,33.25-5c4-0.5,5.5,1.12,5.5,4.75c0,2.76-0.5,49.25-0.5,69.5c0,13-6.25,4-8.75,1.75",
        "M37.25,38c10.25-1.5,27.25-3.75,36.25-4.5",
        "M37,58.25c8.75-1.12,27-3.5,36.25-4")
 ```
-`loadSvg` to load an SVG input (string/inputstream/file) (it'll be slower than the above method since it need to parse the entire svg file)
+- `loadSvg` to load an SVG input (string/inputstream/file) (it'll be slower than the above method since it need to parse the entire svg file)
 
 You can customize the view with the following attributes:
 
