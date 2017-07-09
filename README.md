@@ -1,6 +1,6 @@
 [![Release](https://jitpack.io/v/badoualy/kanji-strokeview.svg)](https://jitpack.io/#badoualy/kanji-strokeview)
 
-# Kanji StrokeView
+<img src="https://github.com/badoualy/kanji-strokeview/blob/master/ART/preview.gif" width="300">
 
 Setup
 ----------------
