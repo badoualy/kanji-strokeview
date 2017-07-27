@@ -1,6 +1,6 @@
 [![Release](https://jitpack.io/v/badoualy/kanji-strokeview.svg)](https://jitpack.io/#badoualy/kanji-strokeview)
 
-# <img src="https://github.com/badoualy/kanji-strokeview/blob/master/ART/web_hi_res_512.png" width="64"> Kanji StrokeView
+# <img src="https://github.com/badoualy/kanji-strokeview/blob/master/ART/web_hi_res_512.png" width="32"> Kanji StrokeView
 <img src="https://github.com/badoualy/kanji-strokeview/blob/master/ART/preview.gif" width="300">
 
 > **Warning**: This library was developed to use with KanjiVG files, if you want to use it with another source, you'll need to update the code and change the input rect size to match the size of your input files (or the view will not be able to scale properly).
