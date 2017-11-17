@@ -1,6 +1,7 @@
 package com.github.badoualy.kanjistroke
 
 import android.graphics.Path
+import android.util.Log
 import java.util.regex.Pattern
 
 /**
@@ -32,18 +33,20 @@ internal object SVGHelper {
         try {
             val matcher = svgInstructionPattern.matcher(pathData)
 
+            var lastCommand = '?'
             var lastX = 0f
             var lastY = 0f
             var lastX1 = 0f
             var lastY1 = 0f
             var subPathStartX = 0f
             var subPathStartY = 0f
-            var wasCurve = false
+            var curve = false
+            var leftOver = emptyList<String>()
 
             while (matcher.find()) {
                 val command = matcher.group(1)[0]
                 val coordinatesStr = matcher.group(2)
-                //Log.v(TAG, "[$command]: $coordinatesStr")
+                Log.v("SVGUtils", "[$command]: $coordinatesStr")
 
                 when (command.toLowerCase()) {
                     'm' -> coordinatesStr.split(',').let {
@@ -101,7 +104,7 @@ internal object SVGHelper {
                         }
                     }
                     'c' -> {
-                        wasCurve = true
+                        curve = true
                         val coordinates = svgCoordinatesPattern.collect(coordinatesStr).map { it.toFloat() }
 
                         var x1 = coordinates[0]
@@ -130,7 +133,7 @@ internal object SVGHelper {
                         lastY = y
                     }
                     's' -> {
-                        wasCurve = true
+                        curve = true
                         val coordinates = svgCoordinatesPattern.collect(coordinatesStr).map { it.toFloat() }
 
                         var x2 = coordinates[0]
@@ -162,14 +165,15 @@ internal object SVGHelper {
                         lastY = subPathStartY
                         lastX1 = subPathStartX
                         lastY1 = subPathStartY
-                        wasCurve = true
+                        curve = true
                     }
                     else -> throw IllegalArgumentException("Unknown command $command for input $pathData")
                 }
-                if (!wasCurve) {
+                if (!curve) {
                     lastX1 = lastX
                     lastY1 = lastY
                 }
+                lastCommand = command
             }
             return p
         } catch (e: Exception) {
