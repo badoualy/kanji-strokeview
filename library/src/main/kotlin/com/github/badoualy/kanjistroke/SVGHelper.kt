@@ -33,7 +33,6 @@ internal object SVGHelper {
         try {
             val matcher = svgInstructionPattern.matcher(pathData)
 
-            var lastCommand = '?'
             var lastX = 0f
             var lastY = 0f
             var lastX1 = 0f
@@ -41,7 +40,6 @@ internal object SVGHelper {
             var subPathStartX = 0f
             var subPathStartY = 0f
             var curve = false
-            var leftOver = emptyList<String>()
 
             while (matcher.find()) {
                 val command = matcher.group(1)[0]
@@ -79,10 +77,8 @@ internal object SVGHelper {
                             lastY += y
                         }
                     }
-                    'v' -> {
-                        val coordinates = svgCoordinatesPattern.collect(coordinatesStr).map { it.toFloat() }
-                        val y = coordinates[0]
-
+                    'v' -> coordinatesStr.forEachCoordinatesGroup(1) { coordinates ->
+                        val y = coordinates.first()
                         if (command.isUpperCase()) {
                             p.lineTo(lastX, y)
                             lastY = y
@@ -91,10 +87,8 @@ internal object SVGHelper {
                             lastY += y
                         }
                     }
-                    'h' -> {
-                        val coordinates = svgCoordinatesPattern.collect(coordinatesStr).map { it.toFloat() }
-                        val x = coordinates[0]
-
+                    'h' -> coordinatesStr.forEachCoordinatesGroup(1) { coordinates ->
+                        val x = coordinates.first()
                         if (command.isUpperCase()) {
                             p.lineTo(x, lastY)
                             lastX = x
@@ -105,58 +99,58 @@ internal object SVGHelper {
                     }
                     'c' -> {
                         curve = true
-                        val coordinates = svgCoordinatesPattern.collect(coordinatesStr).map { it.toFloat() }
+                        coordinatesStr.forEachCoordinatesGroup(6) { coordinates ->
+                            var x1 = coordinates[0]
+                            var y1 = coordinates[1]
 
-                        var x1 = coordinates[0]
-                        var y1 = coordinates[1]
+                            var x2 = coordinates[2]
+                            var y2 = coordinates[3]
 
-                        var x2 = coordinates[2]
-                        var y2 = coordinates[3]
+                            var x = coordinates[4]
+                            var y = coordinates[5]
 
-                        var x = coordinates[4]
-                        var y = coordinates[5]
+                            if (command.isLowerCase()) {
+                                x1 += lastX
+                                x2 += lastX
+                                x += lastX
+                                y1 += lastY
+                                y2 += lastY
+                                y += lastY
+                            }
 
-                        if (command.isLowerCase()) {
-                            x1 += lastX
-                            x2 += lastX
-                            x += lastX
-                            y1 += lastY
-                            y2 += lastY
-                            y += lastY
+                            p.cubicTo(x1, y1, x2, y2, x, y)
+
+                            lastX1 = x2
+                            lastY1 = y2
+                            lastX = x
+                            lastY = y
                         }
-
-                        p.cubicTo(x1, y1, x2, y2, x, y)
-
-                        lastX1 = x2
-                        lastY1 = y2
-                        lastX = x
-                        lastY = y
                     }
                     's' -> {
                         curve = true
-                        val coordinates = svgCoordinatesPattern.collect(coordinatesStr).map { it.toFloat() }
+                        coordinatesStr.forEachCoordinatesGroup(4) { coordinates ->
+                            var x2 = coordinates[0]
+                            var y2 = coordinates[1]
 
-                        var x2 = coordinates[0]
-                        var y2 = coordinates[1]
+                            var x = coordinates[2]
+                            var y = coordinates[3]
 
-                        var x = coordinates[2]
-                        var y = coordinates[3]
+                            if (command.isLowerCase()) {
+                                x2 += lastX
+                                x += lastX
+                                y2 += lastY
+                                y += lastY
+                            }
 
-                        if (command.isLowerCase()) {
-                            x2 += lastX
-                            x += lastX
-                            y2 += lastY
-                            y += lastY
+                            val x1 = 2 * lastX - lastX1
+                            val y1 = 2 * lastY - lastY1
+
+                            p.cubicTo(x1, y1, x2, y2, x, y)
+                            lastX1 = x2
+                            lastY1 = y2
+                            lastX = x
+                            lastY = y
                         }
-
-                        val x1 = 2 * lastX - lastX1
-                        val y1 = 2 * lastY - lastY1
-
-                        p.cubicTo(x1, y1, x2, y2, x, y)
-                        lastX1 = x2
-                        lastY1 = y2
-                        lastX = x
-                        lastY = y
                     }
                     'z' -> {
                         p.close()
@@ -173,7 +167,6 @@ internal object SVGHelper {
                     lastX1 = lastX
                     lastY1 = lastY
                 }
-                lastCommand = command
             }
             return p
         } catch (e: Exception) {
@@ -182,9 +175,10 @@ internal object SVGHelper {
     }
 
     /** Collect all the match at the given group index in the input string from this pattern */
-    private fun Pattern.collect(input: String, groupIndex: Int = 0): List<String> {
+    private fun Pattern.collect(input: String, groupIndex: Int = 0, maxCount: Int = Int.MAX_VALUE): List<String> {
         val matcher = matcher(input)
         val list = ArrayList<String>()
+
         while (matcher.find()) {
             val value = matcher.group(groupIndex)
             if (value.isNotBlank())
@@ -192,5 +186,11 @@ internal object SVGHelper {
         }
 
         return list
+    }
+
+    private inline fun String.forEachCoordinatesGroup(groupSize: Int, action: (List<Float>) -> Unit) {
+        svgCoordinatesPattern.collect(this).map { it.toFloat() }
+                .withIndex().groupBy({ it.index / groupSize }, { it.value })
+                .forEach { (_, coordinates) -> action.invoke(coordinates) }
     }
 }
