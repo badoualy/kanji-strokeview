@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.github.badoualy.kanjistroke">
+          package="com.github.badoualy.kanjistroke.sample">
 
     <application
         android:allowBackup="true"

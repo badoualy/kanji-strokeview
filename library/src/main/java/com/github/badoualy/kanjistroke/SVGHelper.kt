@@ -6,6 +6,8 @@ import java.util.regex.Pattern
 
 /**
  * Helper class to extract and convert an SVG input into a {@code Path} object.
+ *
+ * @see https://github.com/bigfishcat/svg-android/blob/master/src/main/java/com/larvalabs/svgandroid/SVGParser.java
  */
 internal object SVGHelper {
 
@@ -22,7 +24,6 @@ internal object SVGHelper {
      */
     fun extractPathData(input: String) = svgPathPattern.collect(input, 1)
 
-    // see https://github.com/bigfishcat/svg-android/blob/master/src/main/java/com/larvalabs/svgandroid/SVGParser.java
     /**
      * Construct a {@code Path} object from the input pathData data
      * @param[pathData] a valid svg path data string
@@ -181,8 +182,9 @@ internal object SVGHelper {
 
         while (matcher.find()) {
             val value = matcher.group(groupIndex)
-            if (value.isNotBlank())
+            if (value.isNotBlank()) {
                 list.add(value)
+            }
         }
 
         return list

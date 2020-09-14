@@ -4,15 +4,21 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.DashPathEffect
+import android.graphics.Matrix
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.PathMeasure
+import android.graphics.PointF
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
-import com.github.badoualy.R
 import java.io.File
 import java.io.InputStream
 import java.util.TreeSet
-import kotlin.collections.ArrayList
 
 /**
  * View to draw an animated (or not) Kanji from the SVG stroke data.
