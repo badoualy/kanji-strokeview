@@ -21,6 +21,7 @@ Then, add the library dependency:
 compile 'com.github.badoualy:kanji-strokeview:1.0.0'
 ```
 
+This library is also available as a `Composable`: https://github.com/badoualy/animatedsvg-composable
 
 Now go do some awesome stuff!
 
